@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">RateYourClass</string>
+
+    <string name="hint">Comments and Suggestions</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="link_to_register">Not a member? Get Registered now!</string>
+    <string name="forgot_password">Forgot Password? Tap here.</string>
+    <string name="btn_login">LOGIN</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="minimum_password">Password too short, enter minimum 6 characters!</string>
+    <string name="auth_failed">Authentication failed, check your email and password or sign up</string>
+    <string name="btn_register">Register</string>
+    <string name="btn_link_to_login">Already registered. Login Here!</string>
+
+    <!--Profile Activity -->
+    <string name="label_profile">User Info</string>
+    <string name="hint_first_name">First Name</string>
+    <string name="hint_last_name">Last Name</string>
+    <string name="hint_rollno">Roll Number</string>
+    <string name="btn_submit">Submit</string>
+
+    <!--Rating Strings-->
+    <string name="oneStar">Hated it</string>
+    <string name="twoStar">Disliked it</string>
+    <string name="threeStar">It\'s OK</string>
+    <string name="fourStar">Liked it</string>
+    <string name="fiveStar">Loved it</string>
+
+</resources>
