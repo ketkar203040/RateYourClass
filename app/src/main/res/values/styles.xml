@@ -14,6 +14,12 @@
         <item name="android:dropDownListViewStyle">@style/SpinnerStyle</item>
     </style>
 
+    <style name="ReviewForm" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:statusBarColor">@android:color/black</item>
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+
     <style name="InputLabel" parent="TextAppearance.Design.Hint">
         <item name="android:paddingBottom">8dp</item>
         <item name="android:paddingLeft">4dp</item>
@@ -23,4 +29,7 @@
     <style name="TextAppearance.App.TextInputLayout" parent="@android:style/TextAppearance">
         <item name="android:textColor">@color/secondaryText</item>
     </style>
+
+
+
 </resources>

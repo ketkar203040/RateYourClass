@@ -10,7 +10,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ReviewForm"
+        <activity
+            android:name=".ReviewForm"
+            android:theme="@style/ReviewForm"
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,7 +22,10 @@
         </activity>
         <activity android:name=".Login" />
         <activity android:name=".SignupActivity" />
-        <activity android:name=".EditProfileActivity">
+        <activity android:name=".EditProfileActivity"/>
+        <activity android:name=".ViewProfile"
+            android:theme="@style/ReviewForm"
+            android:parentActivityName=".ReviewForm">
 
         </activity>
     </application>

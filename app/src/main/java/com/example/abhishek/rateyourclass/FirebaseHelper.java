@@ -29,45 +29,43 @@ import com.example.abhishek.rateyourclass.ReviewForm;
  */
 
 public class FirebaseHelper {
-    private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-    private DatabaseReference databaseReference = firebaseDatabase.getReference();
-    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-    private String userId = firebaseAuth.getUid();
+    private static FirebaseDatabase firebaseDatabase;
+    static DatabaseReference databaseReference;
+    static FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    static String userId = firebaseAuth.getUid();
     private DatabaseReference userDataRef = databaseReference.child("users").child(userId);
 
-    //User Info
-    private String mStudyYear;
-    private String mStudySem;
-    private String mDept;
 
 
 
-
-    public FirebaseHelper(){
+    FirebaseHelper(){
 
     }
 
-    public void setYearSem(String studyYear, String studySem, String dept){
-        mStudyYear = studyYear;
-        mStudySem = studySem;
-        mDept = dept;
-    }
+    public static void getDatabase(){
+        if (firebaseDatabase == null){
+            firebaseDatabase  = FirebaseDatabase.getInstance();
+            firebaseDatabase.setPersistenceEnabled(true);
+            databaseReference = firebaseDatabase.getReference();
+        }
 
+    }
 
     public void createUserProfile(UserProfile userProfile){
         userDataRef.push().setValue(userProfile);
     }
 
-    public void addSubject(int year, int sem, String dept, SubjectData subjectData){
-        databaseReference.child("classes").child(dept).child(Integer.toString(year)).child(Integer.toString(sem)).push().setValue(subjectData);
+    public void addSubject(String year, String sem, String dept, SubjectData subjectData){
+        databaseReference.child("classes").child(dept).child(year + "-" + sem).push().setValue(subjectData);
     }
 
-    public void submitReview(String subjectName, String section, Float rating, String dept, String year, String sem){
-        DatabaseReference reviewRef = databaseReference.child("reviews").child(dept).child(year)
-                .child(sem).child(subjectName).child(section);
-        reviewRef.setValue(new RatingData(userId, rating));
+    public void submitReview(String subjectName, Float rating, String comments){
+        DatabaseReference reviewRef = databaseReference.child("reviews").child(ReviewForm.acYear).child(ReviewForm.dept)
+                .child(ReviewForm.studyYear + "-" + ReviewForm.studySem).child(subjectName).child(ReviewForm.section).child(userId);
+        reviewRef.setValue(new RatingData(userId, rating, comments));
 
     }
+
 
 
 }

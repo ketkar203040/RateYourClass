@@ -11,18 +11,20 @@ public class UserProfile {
     private String startYear;
     private String endYear;
     private String department;
+    private String section;
 
     public UserProfile(){
 
     }
 
-    public UserProfile(String firstName, String lastName, String rollNumber, String department, String startYear, String endYear){
+    UserProfile(String firstName, String lastName, String rollNumber, String department, String startYear, String endYear, String section){
         this.firstName = firstName;
         this.lastName = lastName;
         this.rollNumber = rollNumber;
         this.department = department;
         this.startYear = startYear;
         this.endYear = endYear;
+        this.section = section;
     }
 
     public String getFirstName(){
@@ -47,5 +49,9 @@ public class UserProfile {
 
     public String getEndYear(){
         return endYear;
+    }
+
+    public String getSection() {
+        return section;
     }
 }

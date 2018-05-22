@@ -3,9 +3,12 @@ package com.example.abhishek.rateyourclass;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -14,9 +17,6 @@ import java.util.List;
 public class SubjectListAdapter extends RecyclerView.Adapter<SubjectListAdapter.ViewHolder> {
 
     List<String> values;
-    String mDept;
-    String mYear;
-    String mSem;
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         TextView subjectView;
@@ -24,7 +24,10 @@ public class SubjectListAdapter extends RecyclerView.Adapter<SubjectListAdapter.
         TextView ratingText;
         TextView submitText;
         RatingBar ratingBar;
-        //public View layout;
+        EditText commentsText;
+
+        Float rating;
+        String comments;
         ViewHolder(View v){
             super(v);
             //layout = v;
@@ -33,10 +36,13 @@ public class SubjectListAdapter extends RecyclerView.Adapter<SubjectListAdapter.
             ratingText = v.findViewById(R.id.rating_text);
             ratingBar = v.findViewById(R.id.rating_bar);
             submitText = v.findViewById(R.id.review_submit);
+            commentsText = v.findViewById(R.id.comments_box);
             //Change Text on rating change
+            rating = ratingBar.getRating();
             ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
                 @Override
                 public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
+                    rating = v;
                     ratingView.setText(String.valueOf(v));
                     if (v == 1.0){
                         ratingText.setText(R.string.oneStar);
@@ -58,17 +64,12 @@ public class SubjectListAdapter extends RecyclerView.Adapter<SubjectListAdapter.
                     }
                 }
             });
+
         }
     }
 
     SubjectListAdapter(List<String> myData){
         values = myData;
-    }
-
-    public void getUserData(String dept, String year, String sem){
-        mDept = dept;
-        mYear = year;
-        mSem = sem;
     }
 
     @NonNull
@@ -81,19 +82,24 @@ public class SubjectListAdapter extends RecyclerView.Adapter<SubjectListAdapter.
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         final String subjectName = values.get(position);
-        final Float rating = holder.ratingBar.getRating();
+
+
         if(!TextUtils.isEmpty(subjectName)){
             holder.subjectView.setText(subjectName);
 
             holder.submitText.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if (!TextUtils.isEmpty(holder.commentsText.getText().toString())){
+                        holder.comments = holder.commentsText.getText().toString();
+                    }
+                    else {
+                        holder.comments = "No Comments";
+                    }
                     FirebaseHelper firebaseHelper = new FirebaseHelper();
-                    //TODO Add sections spinner to edit profile
-                    firebaseHelper.submitReview(subjectName, "A", rating, ReviewForm.dept,
-                            ReviewForm.studyYear, ReviewForm.studySem);
+                    firebaseHelper.submitReview(subjectName, holder.rating, holder.comments);
                 }
             });
         }

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ViewProfile"
+    android:fitsSystemWindows="false"
+    android:theme="@style/ThemeOverlay.AppCompat.Light">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/profile_appbar"
+        android:layout_width="match_parent"
+        android:background="@drawable/img_material1"
+        android:fitsSystemWindows="false"
+        android:layout_height="82dp">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/profile_toolbar"
+            android:fitsSystemWindows="true"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
+        android:layout_marginTop="?android:attr/actionBarSize"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <ImageView
+            android:id="@+id/profile_pic"
+            android:layout_marginTop="?android:attr/actionBarSize"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@drawable/icon_profpic"/>
+
+        <TextView
+            android:id="@+id/profile_name"
+            android:layout_margin="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="25sp"
+            tools:text="Abhishek Ketkar"/>
+
+        <LinearLayout
+            android:layout_margin="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_mail"/>
+
+            <TextView
+                android:id="@+id/profile_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:textSize="16sp"
+                android:layout_marginStart="36dp"
+                tools:text="abc@gmail.com"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_margin="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_id"/>
+
+            <TextView
+                android:id="@+id/profile_rollno"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:textSize="16sp"
+                android:layout_marginStart="36dp"
+                tools:text="16K91A0501"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_margin="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_dept"/>
+
+            <TextView
+                android:id="@+id/profile_dept"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:textSize="18sp"
+                android:layout_marginStart="36dp"
+                tools:text="CSE - A"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_margin="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_gradcap"/>
+
+            <TextView
+                android:id="@+id/profile_year"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:textSize="16sp"
+                android:layout_weight="1"
+                android:layout_marginStart="36dp"
+                tools:text="2016 - 2020"/>
+
+            <TextView
+                android:id="@+id/profile_sem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:layout_weight="1"
+                android:textSize="16sp"
+                tools:text="2 - 2"/>
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+
+</android.support.design.widget.CoordinatorLayout>

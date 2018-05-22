@@ -74,7 +74,7 @@
                 android:layout_below="@id/rating_bar"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginBottom="16dp"
+
                 card_view:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
                 <EditText
@@ -93,7 +93,7 @@
                 android:layout_alignParentRight="true"
                 android:text="@string/btn_submit"
                 android:layout_below="@id/comments_box_container"
-                android:layout_margin="16dp"
+                android:padding="16dp"
                 android:textSize="18sp"
                 android:textColor="@color/colorPrimaryDark"/>
 
