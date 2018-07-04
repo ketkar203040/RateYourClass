@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_marginTop="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add Class"
+            android:textColor="@android:color/secondary_text_light"
+            style="@style/InputLabel" />
+
+        <android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/spinner_add_class"
+            android:dropDownSelector="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:color="@color/white">
+        </android.support.v7.widget.AppCompatSpinner>
+
+        <TextView
+            android:id="@+id/spinner_select_day_heading"
+            android:layout_marginTop="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Select Day"
+            android:textColor="@android:color/secondary_text_light"
+            style="@style/InputLabel" />
+
+        <android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/spinner_select_day"
+            android:dropDownSelector="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:color="@color/white">
+        </android.support.v7.widget.AppCompatSpinner>
+
+        <TextView
+            android:layout_marginTop="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Enter Class Time"
+            android:textColor="@android:color/secondary_text_light"
+            style="@style/InputLabel" />
+
+        <TextView
+            android:id="@+id/edit_select_time"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:drawableRight="@drawable/icon_watch"
+            android:text="08:00 AM" />
+
+
+    </LinearLayout>
+
+
+
+</android.support.constraint.ConstraintLayout>

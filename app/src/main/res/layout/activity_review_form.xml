@@ -19,6 +19,7 @@
             android:id="@+id/appbar"
             android:layout_width="match_parent"
             android:layout_height="81dp"
+            android:layout_marginBottom="8dp"
             android:stateListAnimator="@null"
             android:background="@drawable/img_material1"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
@@ -39,7 +40,6 @@
             android:fitsSystemWindows="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
         </FrameLayout>
 
     </android.support.design.widget.CoordinatorLayout>

@@ -23,6 +23,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import com.example.abhishek.rateyourclass.ReviewForm;
+import com.google.firebase.database.Query;
 
 /**
  * Created by Abhishek on 04-05-2018.
@@ -32,10 +33,10 @@ public class FirebaseHelper {
     private static FirebaseDatabase firebaseDatabase;
     static DatabaseReference databaseReference;
     static FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-    static String userId = firebaseAuth.getUid();
-    private DatabaseReference userDataRef = databaseReference.child("users").child(userId);
+    public static String userId ;
+    private static DatabaseReference mUserDataRef;
 
-
+    static DataSnapshot mDataSnap;
 
 
     FirebaseHelper(){
@@ -46,26 +47,41 @@ public class FirebaseHelper {
         if (firebaseDatabase == null){
             firebaseDatabase  = FirebaseDatabase.getInstance();
             firebaseDatabase.setPersistenceEnabled(true);
+            userId = firebaseAuth.getUid();
             databaseReference = firebaseDatabase.getReference();
+            mUserDataRef = databaseReference.child("users").child(userId);
         }
 
     }
 
     public void createUserProfile(UserProfile userProfile){
-        userDataRef.push().setValue(userProfile);
+        mUserDataRef.child("userProfile").push().setValue(userProfile);
     }
 
     public void addSubject(String year, String sem, String dept, SubjectData subjectData){
         databaseReference.child("classes").child(dept).child(year + "-" + sem).push().setValue(subjectData);
     }
 
+
     public void submitReview(String subjectName, Float rating, String comments){
         DatabaseReference reviewRef = databaseReference.child("reviews").child(ReviewForm.acYear).child(ReviewForm.dept)
-                .child(ReviewForm.studyYear + "-" + ReviewForm.studySem).child(subjectName).child(ReviewForm.section).child(userId);
-        reviewRef.setValue(new RatingData(userId, rating, comments));
+                .child(ReviewForm.studyYear + "-" + ReviewForm.studySem).push();
+        String key = reviewRef.getKey();
+        reviewRef.setValue(new RatingData(userId, subjectName, ReviewForm.section, comments, rating));
 
     }
 
+    public void setSchedule(String className, String day, String time){
+        DatabaseReference scheduleRef = mUserDataRef.child("schedule").child(day);
+        scheduleRef.push().setValue(new ScheduleItem(className, time));
+    }
 
 
+    public void deleteScheduleItem(String day, String key){
+        mUserDataRef.child("schedule").child(day).child(key).removeValue();
+    }
+
+    public void updateScheduleItem(Map<String, Object> map, String day, String key){
+        mUserDataRef.child("schedule").child(day).child(key).updateChildren(map);
+    }
 }

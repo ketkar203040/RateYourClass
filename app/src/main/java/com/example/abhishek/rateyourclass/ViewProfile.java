@@ -36,7 +36,8 @@ public class ViewProfile extends AppCompatActivity {
         toolbar.setTitleTextColor(Color.WHITE);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
+        actionBar.setHomeAsUpIndicator(R.drawable.baseline_arrow_back_white_24);
+        //actionBar.setHomeButtonEnabled(true);
         actionBar.setTitle("User Info");
        // actionBar.setHomeAsUpIndicator(R.drawable.baseline_menu_24);
 

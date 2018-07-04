@@ -8,6 +8,7 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -57,11 +58,7 @@ public class ReviewForm extends AppCompatActivity {
     private ChildEventListener mChildEventListener, nChildEventListener;
     DatabaseReference userDataRef, classRef;
 
-    //RecycleView
-    private RecyclerView recyclerView;
-    public RecyclerView.Adapter adapter;
-    //private RecyclerView.LayoutManager layoutManager;
-   // public List<String> dataList;
+
 
     //UserData
     static String dept;
@@ -77,16 +74,23 @@ public class ReviewForm extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private TextView userNameText;
     private TextView userEmailText;
+    private DrawerLayout.DrawerListener drawerListener;
     Fragment fragment = null;
     Class fragmentClass = null;
+
+    Bundle mSavedState;
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mSavedState = savedInstanceState;
         setContentView(R.layout.activity_review_form);
-        FirebaseHelper.getDatabase();
+        //Check Authentication
+        firebaseAuthCheck();
+
+
 
         //Set up nav drawer
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -95,9 +99,62 @@ public class ReviewForm extends AppCompatActivity {
         userNameText = navView.findViewById(R.id.user_name);
         userEmailText = navView.findViewById(R.id.user_email);
 
-        navigationView.setCheckedItem(R.id.nav_review);
+        //Listener for drawer events
+        drawerListener = new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+            }
+
+            @Override
+            public void onDrawerOpened(@NonNull View drawerView) {
+            }
+
+            @Override
+            public void onDrawerClosed(@NonNull View drawerView) {
+                //For smooth transition load fragment after drawer is closed
+                if (fragmentClass != null){
+                    try {
+                        fragment = (Fragment) fragmentClass.newInstance();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    //For Schedule Fragment
+                    if (fragmentClass == ClassScheduleFragment.class){
+                        if (mSavedState == null) {
+                            getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+                                    .replace(R.id.content_frame, fragment)
+                                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                                    .commit();
+                        }
+                    }
+                    else {
+
+                        // Insert the fragment by replacing any existing fragment
+                        FragmentManager fragmentManager = getSupportFragmentManager();
+                        fragmentManager.beginTransaction()
+                                .setCustomAnimations(android.R.animator.fade_in, android.R.anim.slide_out_right)
+                                .replace(R.id.content_frame, fragment).commit();
+                    }
+                }
+                //Remove listener after transition
+                drawerLayout.removeDrawerListener(drawerListener);
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        };
+
+        //Default drawer check item
+        navigationView.setCheckedItem(R.id.nav_schedule);
         navigationView.getMenu().findItem(R.id.nav_user_profile).setCheckable(false);
 
+
+        //Action on selecting option in Drawer
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -107,7 +164,8 @@ public class ReviewForm extends AppCompatActivity {
                         switch (itemId){
                             case R.id.nav_logout:
                                 AuthUI.getInstance().signOut(ReviewForm.this);
-                                finish();
+                                detachDatabaseReadListener();
+                                //finish();
                                 break;
 
                             case R.id.nav_user_profile:
@@ -118,6 +176,15 @@ public class ReviewForm extends AppCompatActivity {
                                 fragmentClass = ReviewFragment.class;
                                 break;
 
+                            case R.id.nav_schedule:
+                                fragmentClass = ClassScheduleFragment.class;
+                                break;
+
+                            /*case R.id.nav_home:
+                                fragmentClass = HomeFragment.class;
+                                break;
+                                */
+
                             default:
                                 //fragmentClass = ReviewFragment.class;
                                 break;
@@ -125,54 +192,19 @@ public class ReviewForm extends AppCompatActivity {
 
                         // Close the navigation drawer
                         drawerLayout.closeDrawers();
+                        drawerLayout.addDrawerListener(drawerListener);
+
                         // Highlight the selected item has been done by NavigationView
                         // Set action bar title
                         if (itemId != R.id.nav_user_profile) {
                             menuItem.setChecked(true);
                             setTitle(menuItem.getTitle());
                         }
+
                         return true;
                     }
 
                 });
-
-        //Listener for drawer events
-        drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
-            @Override
-            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
-
-            }
-
-            @Override
-            public void onDrawerOpened(@NonNull View drawerView) {
-
-            }
-
-            @Override
-            public void onDrawerClosed(@NonNull View drawerView) {
-                //For smooth transition load fragment after drawer is closed
-                if (fragment != null){
-                    try {
-                        fragment = (Fragment) fragmentClass.newInstance();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                    // Insert the fragment by replacing any existing fragment
-                    FragmentManager fragmentManager = getSupportFragmentManager();
-                    fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
-
-                }
-            }
-
-            @Override
-            public void onDrawerStateChanged(int newState) {
-
-            }
-        });
-
-        //Check Authentication
-        firebaseAuthCheck();
 
 
         //Set up app bar
@@ -185,25 +217,24 @@ public class ReviewForm extends AppCompatActivity {
 
     }
 
+
     //Menu Items (For sign out, etc)
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_item, menu);
+       // MenuInflater inflater = getMenuInflater();
+        //inflater.inflate(R.menu.menu_item, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case R.id.sign_out_menu:
-                AuthUI.getInstance().signOut(this);
-                return true;
-
+            /*
             case R.id.dummy_class:
                 firebaseHelper = new FirebaseHelper();
                 firebaseHelper.addSubject("2", "2", "CSE",new SubjectData("Operating Systems", "John Smith"));
                 return true;
+                */
 
             case android.R.id.home:
                 drawerLayout.openDrawer(GravityCompat.START);
@@ -225,6 +256,7 @@ public class ReviewForm extends AppCompatActivity {
                 if (user != null) {
                     // User is signed in
                     //onSignedInInitialize(user.getDisplayName());
+                    FirebaseHelper.getDatabase();
                     userNameText.setText(user.getDisplayName());
                     userEmailText.setText(user.getEmail());
 
@@ -247,7 +279,7 @@ public class ReviewForm extends AppCompatActivity {
     private void attachDatabaseReadListener(){
         //Retrieve User data to add reviews
         userDataRef = FirebaseHelper.databaseReference.child("users")
-                .child(FirebaseHelper.userId);
+                .child(FirebaseHelper.userId).child("userProfile");
         if (nChildEventListener == null && mChildEventListener == null){
             nChildEventListener = new ChildEventListener() {
                 @Override
@@ -274,7 +306,7 @@ public class ReviewForm extends AppCompatActivity {
 
                     //Finding year and semester
                     int yearDiff = curYear - mstartYear;
-                    if (curMonth <= 7) {
+                    if (curMonth <= 6) {
                         studyYear = Integer.toString(yearDiff);
                         studySem = "2";
                         acYear = Integer.toString(curYear - 1) + "-" + Integer.toString(curYear);
@@ -320,16 +352,23 @@ public class ReviewForm extends AppCompatActivity {
                         };
                         classRef.addChildEventListener(mChildEventListener);
                         //Start Default fragment
-                        Fragment mFragment = null;
-                        Class mFragmentClass = ReviewFragment.class;
-                        try {
-                            mFragment = (Fragment) mFragmentClass.newInstance();
-                        } catch (Exception e) {
-                            e.printStackTrace();
+
+                        if (getSupportFragmentManager().getFragments().isEmpty()){
+                            Fragment mFragment = null;
+                            Class mFragmentClass = ClassScheduleFragment.class;
+                            try {
+                                mFragment = (Fragment) mFragmentClass.newInstance();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            // Insert the fragment by replacing any existing fragment
+                            FragmentManager fragmentManager = getSupportFragmentManager();
+                            fragmentManager.beginTransaction()
+                                    .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+                                    .replace(R.id.content_frame, mFragment).commit();
+                            toolbar.setTitle("Class Schedule");
                         }
-                        // Insert the fragment by replacing any existing fragment
-                        FragmentManager fragmentManager = getSupportFragmentManager();
-                        fragmentManager.beginTransaction().replace(R.id.content_frame, mFragment).commit();
+
                     }
 
                 }
@@ -356,6 +395,7 @@ public class ReviewForm extends AppCompatActivity {
             };
             userDataRef.addChildEventListener(nChildEventListener);
         }
+
 
     }
 
@@ -386,5 +426,14 @@ public class ReviewForm extends AppCompatActivity {
         super.onResume();
       //  FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         FirebaseHelper.firebaseAuth.addAuthStateListener(mAuthStateListener);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mAuthStateListener != null){
+            FirebaseHelper.firebaseAuth.removeAuthStateListener(mAuthStateListener);
+        }
+        detachDatabaseReadListener();
     }
 }
